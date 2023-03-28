@@ -1,0 +1,591 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Integration.Abstract</name>
+    </assembly>
+    <members>
+        <member name="T:Integration.Abstract.CallWrapper">
+            <summary>
+            The call wrapper class will handle all API endpoint calls to the external system. It should also include a connection setup function and a 
+            method for processing responses and throwing errors if the API call failed.
+            </summary>
+        </member>
+        <member name="M:Integration.Abstract.CallWrapper.EstablishConnection(Integration.Abstract.Connection,Integration.Abstract.Settings)">
+            <summary>
+            Establish a connection to the external system, if necessary. This is not an abstract method, so inheriting classes do not necessarily need to override it. 
+            </summary>
+            <param name="connection">Your current connection. We recommend that when this method is overriden, you convert the connection variable to a locally-typed variable and store it in your CallWrapper class.</param>
+            <param name="settings">A collection of your system settings</param>
+        </member>
+        <member name="M:Integration.Abstract.Connection.Dispose">
+            <summary>
+            Dispose of any declared objects. This method should be overridden in the external system to dispose of any other decalred objects.
+            </summary>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.Coalesce(System.Object[])">
+            <summary>
+            Returns the first non-null element
+            </summary>
+            <param name="list">A list of objects (of any length)</param>
+            <example>Coalesce(ADDL_DESCR_2, ADDL_DESCR_1)</example>
+            <returns>object</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.CoalesceToDateTime(System.Object[])">
+            <summary>
+            Returns the first non-null element, converted to a DateTime
+            </summary>
+            <param name="list">A list of objects (of any length)</param>
+            <example>CoalesceToDateTime(PROF_DAT_1, PROF_DAT_2)</example>
+            <returns>DateTime</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.CoalesceToDecimal(System.Object[])">
+            <summary>
+            Returns the first non-null element, converted to a DateTime
+            </summary>
+            <param name="list">A list of objects (of any length)</param>
+            <example>CoalesceToDecimal(QuantityOnHand, 0)</example>
+            <returns>decimal</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.CoalesceToInt(System.Object[])">
+            <summary>
+            Returns the first non-null element, converted to an Int
+            </summary>
+            <param name="list">A list of objects (of any length)</param>
+            <example>CoalesceToInt(QuantitySold, 0)</example>
+            <returns>Int</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ConvertToLong(System.Object)">
+            <summary>
+            Convert an object to a long (int64)
+            </summary>
+            <param name="obj">An object that can be converted to a long</param>
+            <example>ConvertToLong(DOC_ID)</example>
+            <returns>long</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ConvertToInt(System.Object)">
+            <summary>
+            Convert an object to an int
+            </summary>
+            <param name="obj">An object that can be converted to an int</param>
+            <example>ConvertToInt("7")</example>
+            <returns>int</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ConvertToDecimal(System.Object)">
+            <summary>
+            Convert an object to a decimal
+            </summary>
+            <param name="obj">An object that can be converted to a decimal</param>
+            <example>ConvertToDecimal("7.5")</example>
+            <returns>decimal</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ConvertToDouble(System.Object)">
+            <summary>
+            Covnert an object to a double
+            </summary>
+            <param name="obj">An object that can be converted to a double</param>
+            <example>ConvertToDouble("7.5")</example>
+            <returns>double</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.TypesafeMultiplication(System.Object,System.Object)">
+            <summary>
+            Allows for a nullable- and type-safe multiplication.
+            </summary>
+            <param name="a">An object that can be converted to a double</param>
+            <param name="b">An object that can be converted to a double</param>
+            <example>TypesafeMultiplication(PRC_1, QTY_SOLD)</example>
+            <returns>double</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.TypesafeDivision(System.Object,System.Object)">
+            <summary>
+            Allows for a nullable- and type-safe division.
+            </summary>
+            <param name="numerator">An object that can be converted to a double</param>
+            <param name="denomonator">An object that can be converted to a double. Cannot be null.</param>
+            <example>TypesafeDivision(EXT_PRC, QTY_SOLD)</example>
+            <returns>double</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.First(System.Collections.IEnumerable)">
+            <summary>
+            Returns the first object in a collection
+            </summary>
+            <param name="inputList">An ojbect that implements IEnumerable</param>
+            <example>First(Barcodes)</example>
+            <returns>object</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.DateOnly(System.Object)">
+            <summary>
+            Converts the input to a DateTime or DateTimeOffset and then returns only the date portion, in a DateTime.
+            </summary>
+            <param name="input"></param>
+            <example>DateOnly(ExpirationDate)</example>
+            <returns>DateTime (nullable)</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.LocalDateTimeFromDateTimeOffset(System.Object)">
+            <summary>
+            Convert a DateTimeOffset to a DateTime in the local time zone
+            </summary>
+            <param name="input">A DateTimeOffset value</param>
+            <example>LocalDateTimeFromDateTimeOffset(ImportedDateTimeOffset)</example>
+            <returns>DateTime (nullable)</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.DateTimeOffsetFromLocalDateTime(System.Object)">
+            <summary>
+            Convert a DateTime in the local time zone to a DateTimeOffset
+            </summary>
+            <param name="input">A DateTime value</param>
+            <example>DateTimeOffsetFromLocalDateTime(LST_MAINT_DT)</example>
+            <returns>DateTimeOffset</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.CurrentDateTime">
+            <summary>
+            Returns the current DateTime in the local time zone
+            </summary>
+            <example>CurrentDateTime()</example>
+            <returns>DateTime</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.MinimumDateTime">
+            <summary>
+            Returns the minimum DateTime (aka DateTime.MinValue)
+            </summary>
+            <example>MinimumDateTime()</example>
+            <returns>DateTime</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.MaximumDateTime">
+            <summary>
+            Returns the maximum DateTime (aka DateTime.MaxValue)
+            </summary>
+            <example>MaximumDateTime()</example>
+            <returns>DateTime</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.CurrentDateTimeOffset">
+            <summary>
+            Returns the current DateTimeOffset in the local time zone
+            </summary>
+            <example>CurrentDateTimeOffset()</example>
+            <returns>DateTimeOffset</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.IntListFromString(System.Object)">
+            <summary>
+            This will allow you to turn a string into a list of integers. This function is useful for fields that take in an array of ints but are coming from a string field 
+                (e.g. static mapping or a flat string field such as "[1,2]") 
+            </summary>
+            <param name="input">a string that can be parsed into a list of strings</param>
+            <example>IntListFromString("1,2,3")</example>
+            <returns>List&lt;int&gt;</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.StringListFromString(System.Object)">
+            <summary>
+            This will allow you to turn a string into a list of strings. This function is useful for fields that take an array of strings but are coming from a flat string field 
+                (e.g. static mapping or a flat string field, "[keyword1, keyword2]")
+            </summary>
+            <remarks>INTERNAL ONLY - One weakness of this function is that it does not notice embedded quotes or commas. E.g. ["string, string2", string3]</remarks> would have three strings: 1) "string  2) string2"  and 3) string3
+            <param name="input">An object that can be converted to a string</param>
+            <returns>List&lt;string&gt;</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.Larger(System.Object,System.Object)">
+            <summary>
+            Return the larger of two numeric objects. Flee does not handle nullable types well e.g decimal? > decimal,
+             so this lets us do a simple comparison of two values and keep the largest.
+            </summary>
+            <param name="a">An object that can be converted to a decimal</param>
+            <param name="b">An object that can be converted to a decimal</param>
+            <example>Larger(QtyOnHnd,0) would allow us to send the qty on hand, as long as it's non-negative</example>
+            <returns>decimal</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.JSONToDictionary(System.Object)">
+            <summary>
+            Parse a JSON string and convert it to a string/string dictionary
+            </summary>
+            <param name="input">An object that can be converted to a string</param>
+            <example>JSONToDictionary("{"GiftCardId":"" + GiftCardNumber(GiftCertificate) + ""}")</example>
+            <returns>Dictionary&lt;string, string&gt;</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ReadFromStringDictionary(System.Object,System.Object)">
+            <summary>
+            Returns the value for the specified key from a dictionary. If the key does not exist, it returns null
+            </summary>
+            <param name="dictionary"></param>
+            <param name="key"></param>
+            <returns>string</returns>
+            <example>ReadFromStringDictionary(LineInfo, "GiftCardId")</example>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.SubstringAfterLastMatch(System.Object,System.Object)">
+            <summary>
+            This function returns the portion of a string after the last occurance of a given character. This is useful for parsing sections of compound IDs. 
+                E.g. if we have DIR-L78-JWT-6GQ|1, we might want to grab the 1 as a sequence number.
+            </summary>
+            <param name="haystack">An object that can be converted to a string</param>
+            <param name="needle">An object that can be converted to a string</param>
+            <example>SubstringAfterLastMatch("DIR-L78-JWT-6GQ|1", "|")</example>
+            <returns>string</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.RemovePrefix(System.Object,System.Object)">
+            <summary>
+            This function provides a safe way to remove a given prefix. IF the prefix is not present, no changes are made. E.g., if we want to turn BC123 into 123, we can call RemovePrefix("BC", "BC123").
+            </summary>
+            <param name="prefix">An object that can be converted into a string</param>
+            <param name="value">An object that can be converted into a string</param>
+            <example>RemovePrefix("BC", "BC123")</example>
+            <returns>string</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.RegExMatch(System.Object,System.Object)">
+            <summary>
+            Determine if the input string matches the given pattern in RegEx.
+            </summary>
+            <param name="input">An object that can be converted to a string</param>
+            <param name="pattern">An object that can be converted to a string</param>
+            <example>Regex("The dog is running", "^The")</example>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.WildcardMatch(System.Object,System.Object)">
+            <summary>
+            This function is intended to replicate SQL-style likeness comparison. E.g. WildcardMatch("test1234", "%est1%") would return true
+             We accomplish this by replacign the SQL wildcard with a regex wildcard .* (meaning one or more of any character) and passing it to our regex
+             function. Any non-regex friendly input would not be supported. E.g. WildcardMatch("abcdefg", "%[1]%") would return true because of it's regex conversion
+            </summary>
+            <param name="input">An object that can be converted to a string</param>
+            <param name="pattern">An object that can be converted to a string</param>
+            <example>WildcardMatch("abcdefg", "%[1]%")</example>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.Truncate(System.Object,System.Object)">
+            <summary>
+            Truncates the input at the 
+            </summary>
+            <param name="input">An object that can be converted to a string</param>
+            <param name="maxLength">An object that can be converted to an int</param>
+            <example>Truncate("This is a really long string that I need to shorten", 10)</example>
+            <returns>string</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.IsEmpty(System.Object)">
+            <summary>
+            Determines if the input object is one of several values indicating empty.
+            Null and DBNull will return true. For non-nullable types with edge default values, we also return true. E.g. these type values all indicate an empty value:
+                Guid.Empty, DateTime.MinValue, DateTimeOffset.MinValue, "" (empty string)
+            </summary>
+            <param name="input">An object of any type</param>
+            <example>IsEmpty(DESCR)</example>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.IsNull(System.Object)">
+            <summary>
+            Determines if the passed object is null or not
+            </summary>
+            <param name="value">An object of any type</param>
+            <example>IsNull(CustomFields)</example>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.GetXMLFromObject(System.Object)">
+            <summary>
+            Convert an object to XML and return the XML as a string
+            </summary>
+            <param name="o"></param>
+            <returns>string</returns>
+            <remarks>DONOTEXPORT</remarks>
+        </member>
+        <member name="M:Integration.Abstract.ConversionFunctions.ValidateDataType(System.Object,System.Type,System.String,System.String,System.Boolean)">
+            <summary>
+            Determine if the supplied object belongs to the specified type. If it is not, this proc may throw an error to indicate the problem.
+            Recommended usage of this procedure would be to include the method and parameter names and leave throwError as true. However, there are
+            cases where you may not need to throw an error (e.g. you are checking to see if the data is one of multiple types), in which case the method and
+            parameter name fields can be excluded and the throwError flag should be set to true.
+            </summary>
+            <param name="candidate"></param>
+            <param name="dataType"></param>
+            <param name="methodName"></param>
+            <param name="parameterName"></param>
+            <param name="throwError"></param>
+            <returns>bool</returns>
+            <remarks>DONOTEXPORT</remarks>
+        </member>
+        <member name="T:Integration.Abstract.Helpers.ApiNullValue">
+            <summary>
+            Provide a property decoration that allows users to specify a default value that will only be populated when a mapping attempts to set a value for the 
+            field. 
+            </summary>
+            <example>
+            Usage: add this attribtue to the property you want to specify a default value for, with the default value in parenthesis.
+            This will set the weight field to 0 if a null value is set by a mapping in iPaaS:
+                     [ApiNullValue(0)]
+                     public decimal? Weight;
+            </example>
+            <remarks>
+            This feature is slightly different from specifying a JSON default, as it provides the additional feature of only activating the default value if a mapping attempts to assign it
+            a null value. This is useful in cases where nulls are treated as a non-update to the field, but a set value is used to indicate that the existing value should be erased.
+            For example, in the BigCommerce API, the category model has a ParentId field. If I want to update the category to have no parent, I need to send a 0 for the ParentId field. 
+            If I want to update other fields and leave the ParentId alone, I set the ParentId to null. This ApiNullValue tag allows us to get that functionality simply by using a standard
+            field mapping in iPaaS. If a mapping exists for ParentId but the mapping finds no parent, the field is set to 0. If there is no mapping, the field is set to null and is ignored
+            by the BC API.
+            </remarks>
+        </member>
+        <member name="T:Integration.Abstract.Helpers.CallContext">
+            <summary>
+            This helper method provides a way to set contextual data that flows with any forward calls. This provides iPaaS with some critical functionality, 
+            but may be of limited use to other developers. The primary use of this class for external developers will be in the UniversalCancellationToken 
+            that is stored in the CallContext. Under certain conditions, iPaaS may choose to terminate a long-running external process. So where possible 
+            (e.g. on an async call to an external API) developers should utilize the given cancellation token to allow us to gracefully terminate the process.
+            
+            This code was based on the article here: https://www.cazzulino.com/callcontext-netstandard-netcore.html
+            </summary>
+        </member>
+        <member name="M:Integration.Abstract.Helpers.CallContext.SetData(System.String,System.Object)">
+            <summary>
+            Stores a given object and associates it with the specified name.
+            </summary>
+            <param name="name">The name with which to associate the new item in the call context.</param>
+            <param name="data">The object to store in the call context.</param>
+        </member>
+        <member name="M:Integration.Abstract.Helpers.CallContext.GetData(System.String)">
+            <summary>
+            Retrieves an object with the specified name from the <see cref="T:Integration.Abstract.Helpers.CallContext"/>.
+            </summary>
+            <param name="name">The name of the item in the call context.</param>
+            <returns>The object in the call context associated with the specified name, or <see langword="null"/> if not found.</returns>
+        </member>
+        <member name="P:Integration.Abstract.Helpers.CallContext.UniversalCancellationToken">
+            <summary>
+            The cancellation token that will persist throughout the lifetime of a given transfer request. Any async calls could use this
+            token to allow iPaaS to gracefully exit from any excessively long transfers.
+            </summary>
+        </member>
+        <member name="P:Integration.Abstract.Helpers.CallContext.DebugMode">
+            <summary>
+            Determines if the current hook was sent in DebugMode or not. DebugMode is triggered by sending a normal scope with /debug appended to it.
+            E.g. sending product/updated/debug instead of product/updated as the scope will cause the transfer to run in debugmode. External integration dlls may 
+            want to trigger additional logging or handle logging routines differently in debugmode, so we expose that setting here.
+            </summary>
+        </member>
+        <member name="T:Integration.Abstract.Helpers.PersistentDataHandler">
+            <summary>
+            This class is for persisting data, such as a login token, between calls. Currently this feature is not fully supported.
+            </summary>
+        </member>
+        <member name="M:Integration.Abstract.Helpers.QuotaException.GetResetDT">
+            <summary>
+            A helper function that browses all ResposeQuotas and returns the latest reset datetime.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.Helpers.QuotaException.AddResponseQuota(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.Int64})">
+            <summary>
+            A helper function to create a basic ResponseQuota and assign it to the current QuotaException
+            </summary>
+            <param name="quotaId"></param>
+            <param name="totalCallsInQuota"></param>
+            <param name="remainingCallsInQuota"></param>
+            <param name="quotaResetDateTime"></param>
+            <param name="availableCallsAtReset"></param>
+        </member>
+        <member name="T:Integration.Abstract.MetaData">
+            <summary>
+            This class is used to load meta data from new exteranl systems. The LoadMetaData method should be overriden to populate all of the specified properties.
+            This data will be consumed by iPaaS and used to populate the data required to set up a new integration.
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.MetaData.Info">
+            <summary>
+            Provides the info for this integration dll
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Integration.Abstract.MetaData.Tables" -->
+        <member name="F:Integration.Abstract.MetaData.Scopes">
+            <summary>
+            List of scopes that this integration sends out
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.MetaData.Presets">
+            <summary>
+            List of preset values that can be set when creating an integration in iPaaS
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.Name">
+            <summary>
+            Name. 
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.SystemTypeId">
+            <summary>
+            The system type id for this integration. Obtain this value from iPaaS.
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.IntegrationFilename">
+            <summary>
+            Name of the complied Dll
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.IntegrationNamespace">
+            <summary>
+            The namespace that the integration dll uses
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.ApiVersion">
+            <summary>
+            The API version of the external system.
+            </summary>
+            <remarks>
+            This field represents the version of the API being used. E.g. if we are connecting to Magento 2, the target ApiVersion might be 2.3.1.
+            </remarks>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.VersionMajor">
+            <summary>
+            The major version of the external integration dll.
+            </summary>
+            <remarks>
+            This field represents the version of the integration dll, NOT the version of the external API. E.g. we may be connecting to Magento 2, but if
+            this is the first iteration of an iPaaS connection that API, the VersionMajor would be 1.
+            </remarks>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.VersionMinor">
+            <summary>
+            The minor version of the external integration dll.
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.IntegrationInfo.ImageUrl">
+            <summary>
+            The location of where the image is stored via a url
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.Scope.Name">
+            <summary>
+            Required field
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.Scope.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Integration.Abstract.Model.Scope.MappingCollectionTypeId">
+            <summary>
+            Use the following endpoint found in the Integrations API to get a list of available mapping collection types 
+            Endpoint: /v2/Lookup/MappingCollectionType
+            </summary>
+        </member>
+        <member name="M:Integration.Abstract.Settings.GetSetting(System.String,System.Boolean)">
+            <summary>
+            Get setting by name
+            </summary>
+            <remarks>
+            If the Required parameter is set to True, we throw an error if we cannot find the parameter. This is to aid in debugging so that we know the problem is a
+            missing setting, rather than find out down the line that a required value is just being passed around as null
+            </remarks>
+            <param name="settingName"></param>
+            <param name="required"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.ModelGetAsync(Integration.Abstract.Connection,System.Int32,System.Object)">
+            <summary>
+            Get an object by id and mapping collection type
+            </summary>
+            <param name="mappingCollectionType">The mapping collection type id</param>
+            <param name="id">The id of the object</param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.ModelCreateAsync(Integration.Abstract.Connection,System.Int32,System.Object,System.Object)">
+            <summary>
+            Create a new object
+            </summary>
+            <param name="mappingCollectionType">The mapping collection type id</param>
+            <param name="sourceObject">The object being created</param>
+            <param name="id">The id of the object</param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.ModelUpdateAsync(Integration.Abstract.Connection,System.Int32,System.Object,System.Object)">
+            <summary>
+            Updates an existing object
+            </summary>
+            <param name="mappingCollectionType">The mapping collection type id</param>
+            <param name="sourceObject">The object being modified</param>
+            <param name="id">The id of the object</param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.ModelDeleteAsync(Integration.Abstract.Connection,System.Int32,System.Object)">
+            <summary>
+            Delete an object by its id
+            </summary>
+            <param name="MappingCollectionType">The mapping collection type id</param>
+            <param name="Id">The id of the object</param>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.CollectAdditionalExternalIds(Integration.Abstract.Connection,System.Int32,System.Object,System.Object)">
+            <summary>
+            Creates a list of new external ids to save
+            </summary>
+            <remarks>
+            Some objects may require additional handling for ExternalIds. For example, if we save a product with variants to BigCommerce, we need to save the
+            external ids from the child objects as well. We call this function to create a list of new external ids to save
+            </remarks>
+            <param name="mappingCollectionType"></param>
+            <param name="sourceObject"></param>
+            <param name="destinationObject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.GetChildMappings(Integration.Abstract.Connection,System.Int32,System.Int64,System.Int32)">
+            <summary>
+            Returns a list of subtable mappings
+            </summary>
+            <remarks>
+            Given a type, mappingCollectionId, and direction, return a list of subtable mappings. The SubTableMapping class includes source and destination info
+            </remarks>
+            <param name="mappingCollectionType"></param>
+            <param name="mappingResponseId"></param>
+            <param name="mappingDirection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.InitializeData(Integration.Abstract.Connection,System.Int32)">
+            <summary>
+            Given a mapping collection type, transfer any initial data requirements. This may include data going both to and from iPaaS. For example, your CRM 
+                software might initialize customer data to iPaaS, while your website initializes product categories from iPaaS.
+            </summary>
+            <param name="connection"></param>
+            <param name="mappingCollectionType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.HandlePrerequisite(Integration.Abstract.Connection,Integration.Abstract.Helpers.TransferRequest)">
+            <summary>
+            Given a data transfer request, determine if there is anything we need to verify or transfer first. For example, if we are running a transaction 
+                transfer that includes a gift card payment, we may want to validate that the gift card exists in the target system and transfer it if it is not.
+            </summary>
+            <param name="connection"></param>
+            <param name="transferRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.HandlePostActions(Integration.Abstract.Connection,Integration.Abstract.Helpers.TransferRequest)">
+            <summary>
+            Given a data transfer request, determine if there is anything we need to do after the transfer is complete. For example, after we transfer an 
+                order, we may want to transfer any associated deposit tickets too.
+            </summary>
+            <param name="connection"></param>
+            <param name="transferRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.UpdateWebhookSubscriptionAsync(Integration.Abstract.Connection,System.String,System.Boolean)">
+            <summary>
+            Updates webhook subscriptions in the external system async
+            </summary>
+            <param name="scope"></param>
+            <param name="subscribed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.EstimateTotalAPICallsMade(Integration.Abstract.Connection,System.Int32,System.Object,System.Int32)">
+            <summary>
+            This is an optionally overridable function that allows us to estimate the number of external API calls that a given transfer will require.
+                The value returned here is used to claim an estimated amount of API calls on systems that are throttled. If this feature is not implemented
+                bursty transfer requests may overload the external system.
+            Note that this function is only called on transfers FROM iPaaS. On transfers going TO iPaaS, the source data will be pulled early in the transfer
+                process, so the number of API calls required will be a known quantity already.
+            </summary>
+            <param name="connection"></param>
+            <param name="mappingCollectionType"></param>
+            <param name="sourceObject"></param>
+            <returns>The estimated number of external API calls that will be made during a transfer. The default return value is 1.</returns>
+        </member>
+        <member name="M:Integration.Abstract.TranslationUtilities.ProcessAuthorization(Integration.Abstract.Connection,Integration.Abstract.Model.Authorization)">
+            <summary>
+            This is an optionally overridable function that allows us to process authorization data (e.g. convert temporary OAuth values into a 
+                set of permanent keys. 
+            </summary>
+            <param name="connection"></param>
+            <param name="authorization"></param>
+        </member>
+    </members>
+</doc>
