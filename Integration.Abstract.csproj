@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>Red Rook</Authors>
     <Product>Integration.Abstract</Product>
     <Description>This is the package used to create an Integration within the iPaaS area.</Description>

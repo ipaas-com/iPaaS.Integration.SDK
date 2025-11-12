@@ -32,6 +32,10 @@ namespace Integration.Abstract
         public string IPaaSApi_Transactions { get { return GetSetting("Transactions_URL"); } }
         public string IPaaSApi_Token { get { return GetSetting("IPaaSApi_Token"); } }
         public string IPaaSApi_WebhookUrl { get { return GetSetting("Hook_URL"); } }
+        public string IPaaSApi_EmployeeUrl { get { return GetSetting("Employees_URL"); } }
+        [Obsolete("Use IPaaSApi_MediaUrl instead")]
+        public string IPaaSApi_MessageUrl { get { return GetSetting("Messages_URL"); } }
+        public string IPaaSApi_MediaUrl { get { return GetSetting("Messages_URL"); } }
         #endregion
 
         //The TrackingGuid will be a unique identifier for the current transfer session. This ID will be used in the tech log and the activity tracker.
