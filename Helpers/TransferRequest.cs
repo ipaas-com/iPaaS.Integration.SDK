@@ -13,7 +13,8 @@ namespace Integration.Abstract.Helpers
             Delete,
             Child,
             Initialization,
-            Bulk
+            Bulk,
+            Polling
         }
         public RequestType_Enum RequestType;
 
@@ -23,6 +24,7 @@ namespace Integration.Abstract.Helpers
         public int MappingDirection; //TO_IPAAS = 1, FROM_IPAAS = 2
         public object Payload;
         public bool HasErrors = false;
+        public Exception Exception;
 
         // HS_Queue Items
         public long SourceSystemId;
