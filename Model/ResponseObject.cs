@@ -13,5 +13,7 @@ namespace Integration.Abstract.Model
         public List<ResponseQuota> ResponseQuotas;
 
         public object CollisionData;
+
+        public Type ResponseType;
     }
 }
